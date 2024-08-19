@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('task_name');
             $table->text('task_description')->nullable();
-            $table->unsignedBigInteger('assigned_user');
+            $table->unsignedBigInteger('assigned_user')->nullable();
             $table->unsignedBigInteger('task_status');
             $table->timestamps();
 
