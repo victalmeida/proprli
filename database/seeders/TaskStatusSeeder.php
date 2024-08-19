@@ -17,9 +17,9 @@ class TaskStatusSeeder extends Seeder
     public function run(): void
     {
         foreach (self::statusName as $statusName) {
-            if (TaskStatus::where('status_name', $statusName)) {
-                continue;
-            }
+            // if (!empty(TaskStatus::where('status_name', $statusName))) {
+            //     continue;
+            // }
             TaskStatus::create(
                 [
                     'status_name' => $statusName,
