@@ -15,7 +15,7 @@ class TaskStatusController extends Controller
      */
     public function index(TaskStatus $taskStatus)
     {
-        $status = taskStatus::all();
+        $status = TaskStatus::all();
         return response()->json($status);
     }
 }
