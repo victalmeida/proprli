@@ -4,7 +4,7 @@ namespace App\Http\Services\Task;
 
 use Illuminate\Database\Eloquent\Collection;
 use App\DTO\IndexTaskDTO;
-use App\Models\Task;
+use App\Models\Fluents\TaskFluent;
 
 class IndexTaskService
 {
@@ -17,7 +17,8 @@ class IndexTaskService
      */
     public function execute(IndexTaskDTO $indexTaskDTO): Collection
     {
-        $result = Task::with('taskComment')->assignedUserFilter((int) $indexTaskDTO->assigned_user)
+        $result = TaskFluent::with('taskComment')
+            ->assignedUserFilter((int) $indexTaskDTO->assigned_user)
             ->taskStatusFilter((int) $indexTaskDTO->task_status)
             ->createdAtFilter(
                 (string) $indexTaskDTO->task_creation_start,
