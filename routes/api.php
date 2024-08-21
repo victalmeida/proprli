@@ -3,7 +3,13 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
-use App\Http\Controllers\LoginController;
+use App\Http\Controllers\AuthController;
+use App\Http\Controllers\TaskController;
+use App\Http\Controllers\TaskStatusController;
+use App\Http\Controllers\TaskCommentController;
+use App\Http\Controllers\AuditController;
+use App\Http\Controllers\UserController;
+use App\Http\Controllers\BuildingController;
 
 /*
 |--------------------------------------------------------------------------
@@ -16,9 +22,43 @@ use App\Http\Controllers\LoginController;
 |
 */
 
-Route::middleware('auth:api')->get('/user', function (Request $request) {
-    return $request->user();
+Route::middleware('auth:api')->get('/user',[UserController::class, 'index']);
+Route::middleware('auth:api')->get('/audit', [AuditController::class, 'index']);
+Route::middleware('auth:api')->get('/building', [BuildingController::class, 'index']);
+
+
+/**
+ * Auth Routes
+ */
+Route::prefix('/auth')->group(function () {
+    Route::post('/', [AuthController::class, 'authenticate']);
+    Route::middleware('auth:api')->group(function () {
+        Route::get('/me', [AuthController::class, 'me']);
+        Route::post('/logout', [AuthController::class, 'logout']);
+        Route::put('/', [AuthController::class, 'refresh']);
+    });
 });
 
 
-Route::post('/auth', [LoginController::class, 'authenticate']);
+/**
+ * Task Routes
+ */
+Route::middleware('auth:api')->prefix('/task')->group(function () {
+    Route::post('/', [TaskController::class, 'create']);
+    Route::put('/', [TaskController::class, 'update']);
+    Route::get('/', [TaskController::class, 'index']);
+});
+
+/**
+ * Task Status Routes
+ */
+Route::middleware('auth:api')->prefix('/task/status')->group(function () {
+    Route::get('/', [TaskStatusController::class, 'index']);
+});
+
+/**
+ * Task Status Routes
+ */
+Route::middleware('auth:api')->prefix('/task/comment')->group(function () {
+    Route::post('/', [TaskCommentController::class, 'create']);
+});

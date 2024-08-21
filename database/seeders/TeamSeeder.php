@@ -4,28 +4,27 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
-use  App\Models\TaskStatus;
+use  App\Models\Team;
 
-class TaskStatusSeeder extends Seeder
+class TeamSeeder extends Seeder
 {
-
-    const STATUS_NAME = ['Open', 'In Progress', 'Completed', 'Rejected'];
-
+    const TEAMS = ['Team 1', 'Team 2'];
     /**
      * Run the database seeds.
      */
+    
     public function run(): void
     {
-        foreach (self::STATUS_NAME as $statusName) {
+        foreach (self::TEAMS as $team) {
 
-            if (!TaskStatus::where('status_name', $statusName)
+            if (!Team::where('name', $team)
                 ->get()
                 ->isEmpty()) {
                 continue;
             }
-            TaskStatus::create(
+            Team::create(
                 [
-                    'status_name' => $statusName,
+                    'name' => $team,
                 ],
             );
         }

@@ -48,13 +48,18 @@ class Handler extends ExceptionHandler
         });
     }
 
+    /**
+     * Register the exception unauthenticated erro to return a default response to Api
+     *
+     * @param [type] $request
+     * @param AuthenticationException $exception
+     * @return void
+     */
     protected function unauthenticated($request, AuthenticationException $exception)
     {
-
         if ($request->expectsJson() || $request->is('api/*')) {
             return response()->json(['error' => 'Unauthenticated.'], 401);
         }
-
         return redirect()->guest(route('auth.login'));
     }
 }

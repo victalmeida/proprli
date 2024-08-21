@@ -1,0 +1,314 @@
+openapi: 3.0.0
+info:
+  title: Proprli API
+  description: This API is developed as part of the technical test for Proprli. It is built using Laravel 10 and serves to manage tasks within the system.
+  version: 1.0.0
+servers:
+- url: https://virtserver.swaggerhub.com/victalmeida/Proprli/1.0.0
+  description: SwaggerHub API Auto Mocking
+- url: http://localhost:8989/api
+  description: Local development server
+security:
+- BearerAuth: []
+paths:
+  /user:
+    get:
+      tags:
+      - User
+      summary: Retrieve authenticated user information
+      operationId: getUserInfo
+      responses:
+        "200":
+          description: User information retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        "401":
+          description: Unauthorized
+      security:
+      - BearerAuth: []
+  /auth:
+    put:
+      tags:
+      - Authentication
+      summary: Refresh token
+      operationId: refreshToken
+      responses:
+        "200":
+          description: Token refreshed successfully
+        "401":
+          description: Invalid credentials
+      security:
+      - BearerAuth: []
+    post:
+      tags:
+      - Authentication
+      summary: Authenticate and obtain a token
+      operationId: login
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Auth'
+        required: true
+      responses:
+        "200":
+          description: Token generated successfully
+        "401":
+          description: Invalid credentials
+  /auth/logout:
+    post:
+      tags:
+      - Authentication
+      summary: Logout and invalidate the token
+      operationId: logout
+      responses:
+        "200":
+          description: Successfully logged out
+        "401":
+          description: Unauthorized
+      security:
+      - BearerAuth: []
+  /task:
+    get:
+      tags:
+      - Task
+      summary: List all tasks
+      operationId: listTasks
+      parameters:
+      - name: task_creation_start
+        in: query
+        description: Start date for task creation filtering.
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+          format: date
+      - name: task_creation_end
+        in: query
+        description: End date for task creation filtering.
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+          format: date
+      - name: assigned_user
+        in: query
+        description: Filter tasks by assigned user ID.
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: integer
+      - name: task_status
+        in: query
+        description: Filter tasks by status ID.
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: integer
+      responses:
+        "200":
+          description: List of tasks retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/TaskWithComment'
+      security:
+      - BearerAuth: []
+    put:
+      tags:
+      - Task
+      summary: Update an existing task
+      operationId: updateTask
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Task'
+        required: true
+      responses:
+        "200":
+          description: Task updated successfully
+      security:
+      - BearerAuth: []
+    post:
+      tags:
+      - Task
+      summary: Create a new task
+      operationId: createTask
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Task'
+        required: true
+      responses:
+        "201":
+          description: Task created successfully
+      security:
+      - BearerAuth: []
+  /task/comment:
+    post:
+      tags:
+      - Task
+      summary: Add a comment to a task
+      operationId: addComment
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Comment'
+        required: true
+      responses:
+        "201":
+          description: Comment added successfully
+      security:
+      - BearerAuth: []
+  /audit:
+    get:
+      tags:
+      - Audit
+      summary: Retrieve audit logs
+      operationId: getAuditLogs
+      responses:
+        "200":
+          description: List of audit logs retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/inline_response_200'
+      security:
+      - BearerAuth: []
+components:
+  schemas:
+    User:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        email:
+          type: string
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+    Task:
+      type: object
+      properties:
+        id:
+          type: integer
+        task_name:
+          type: string
+        task_description:
+          type: string
+        assigned_team:
+          type: integer
+        assigned_building:
+          type: integer
+        assigned_user:
+          type: integer
+        task_status:
+          type: integer
+    TaskWithComment:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        task_name:
+          type: string
+          example: teste 3
+        task_description:
+          type: string
+          example: Tesde de Description
+        assigned_user:
+          type: integer
+          example: 1
+        assigned_building:
+          type: integer
+          example: 1
+        assigned_team:
+          type: integer
+          example: 1
+        task_status:
+          type: integer
+          example: 3
+        created_at:
+          type: string
+          format: date-time
+          example: 2024-08-20T17:03:45Z
+        updated_at:
+          type: string
+          format: date-time
+          example: 2024-08-20T17:06:05Z
+        task_comment:
+          type: array
+          items:
+            $ref: '#/components/schemas/TaskComment'
+    TaskComment:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        comment:
+          type: string
+          example: Testando a Tarefa e finalizando alguns ajustes
+        user_id:
+          type: integer
+          example: 1
+        task_id:
+          type: integer
+          example: 1
+        created_at:
+          type: string
+          format: date-time
+          example: 2024-08-20T17:04:31Z
+        updated_at:
+          type: string
+          format: date-time
+          example: 2024-08-20T17:04:31Z
+    Comment:
+      type: object
+      properties:
+        task_id:
+          type: integer
+        comment:
+          type: string
+    Auth:
+      type: object
+      properties:
+        email:
+          type: string
+        password:
+          type: string
+    inline_response_200:
+      type: object
+      properties:
+        id:
+          type: integer
+        action:
+          type: string
+        created_at:
+          type: string
+          format: date-time
+        user_id:
+          type: integer
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
