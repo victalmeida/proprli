@@ -2,6 +2,12 @@
 
 This project is part of the technical test for Proprli. The objective is to develop an API for creating and editing tasks. The API was built using Laravel 10 with a focus on the API components. The project includes six main tables (building, team, team_member, task, task_status, task_comment) and an additional audit table. Additionally, the default Laravel user table is used to link users to teams. For convenience, some data is pre-populated using seeders, allowing tasks to be created with pre-existing data.
 
+## Swagger API Documentation
+
+You can find the full API documentation on SwaggerHub at the following link:
+
+[Swagger API Documentation](https://app.swaggerhub.com/apis/victalmeida/Proprli/1.0.0)
+
 ## Technologies Used
 
 - Laravel 10
