@@ -6,8 +6,9 @@ use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Contracts\Validation\Validator;
 
-class AuthRequest extends FormRequest
+class CreateTaskRequest extends FormRequest
 {
+
     /**
      * Determine if the user is authorized to make this request.
      */
@@ -24,8 +25,11 @@ class AuthRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'email' => 'required|string|email',
-            'password' => 'required|string',
+            'task_name' => 'required|string',
+            'assigned_team' => 'required|int',
+            'assigned_building' => 'required|int',
+            'task_description' => 'nullable|string',
+            'assigned_user' => 'nullable|int',
         ];
     }
 
