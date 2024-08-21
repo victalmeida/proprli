@@ -13,7 +13,9 @@ return new class extends Migration
     {
         Schema::create('audit', function (Blueprint $table) {
             $table->id();
-            $table->text('task_description')->nullable();
+            $table->text('audit_description')->nullable();
+            $table->text('audit_tag', 100);
+            $table->string('process_id', 100)->nullable();
             $table->unsignedBigInteger('user');
             $table->timestamp('created_at')->useCurrent();
 
