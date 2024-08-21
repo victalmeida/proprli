@@ -8,4 +8,7 @@ seed:
 	docker exec  proprli-app-1 php artisan db:seed;
 
 composer:
-	docker exec proprli-app-1 composer install;	
+	docker exec proprli-app-1 composer install;
+
+up:	
+	docker compose up;
