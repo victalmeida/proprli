@@ -4,28 +4,27 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
-use  App\Models\TaskStatus;
+use  App\Models\Building;
 
-class TaskStatusSeeder extends Seeder
-{
-
-    const STATUS_NAME = ['Open', 'In Progress', 'Completed', 'Rejected'];
+class BuildingSeeder extends Seeder
+{   
+    const BUILDING_NAME = ['Building Team 1', 'Building Team 2'];
 
     /**
      * Run the database seeds.
      */
     public function run(): void
     {
-        foreach (self::STATUS_NAME as $statusName) {
+        foreach (self::BUILDING_NAME as $building) {
 
-            if (!TaskStatus::where('status_name', $statusName)
+            if (!Building::where('name', $building)
                 ->get()
                 ->isEmpty()) {
                 continue;
             }
-            TaskStatus::create(
+            Building::create(
                 [
-                    'status_name' => $statusName,
+                    'name' => $building,
                 ],
             );
         }
