@@ -1,66 +1,71 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Proprli API Project
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+This project is part of the technical test for Proprli. The objective is to develop an API for creating and editing tasks. The API was built using Laravel 10 with a focus on the API components. The project includes six main tables (building, team, team_member, task, task_status, task_comment) and an additional audit table. Additionally, the default Laravel user table is used to link users to teams. For convenience, some data is pre-populated using seeders, allowing tasks to be created with pre-existing data.
 
-## About Laravel
+## Technologies Used
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+- Laravel 10
+- Docker
+- MySQL
+- JWT (JSON Web Token)
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## Project Features
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+- **Building and Managing Tasks:** The API allows the creation, updating, and management of tasks, with status tracking and comment functionalities.
+- **Audit Logging:** An observer was implemented to automatically log audit records during model events.
+- **Service Architecture:** The project follows a service-oriented architecture to decouple business logic from the controllers.
+- **Automated Testing:** Automatic tests were implemented to ensure the reliability of the core functionalities.
 
-## Learning Laravel
+## API Endpoints
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+The project provides 10 main API routes to assist in the development process:
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+- `GET|HEAD  api/audit` - Retrieve audit logs.
+- `POST      api/auth` - User authentication.
+- `PUT       api/auth` - Update user credentials.
+- `POST      api/auth/logout` - Logout the user.
+- `GET|HEAD  api/auth/me` - Retrieve current user information.
+- `GET|HEAD  api/building` - Retrieve building information.
+- `POST      api/task` - Create a new task.
+- `PUT       api/task` - Update an existing task.
+- `GET|HEAD  api/task` - Retrieve tasks.
+- `POST      api/task/comment` - Add a comment to a task.
+- `GET|HEAD  api/task/status` - Retrieve task statuses.
+- `GET|HEAD  api/user` - Retrieve user information.
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains over 2000 video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+Additionally, there is an `Insomnia_2024-08-21.json` file located in the root of the project containing a collection for Insomnia with all the routes.
 
-## Laravel Sponsors
+## Installation
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the Laravel [Patreon page](https://patreon.com/taylorotwell).
+To assist with the installation, a Makefile has been included with several commands.
 
-### Premium Partners
+1. Clone the project to your desired directory.
+2. Copy the `.env_example` file to `.env`.
+3. Open a terminal in the root of the project.
+4. The project uses ports 3388 and 8989. If you have any processes running on these ports, you will need to stop them to successfully start the container.
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Cubet Techno Labs](https://cubettech.com)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[Many](https://www.many.co.uk)**
-- **[Webdock, Fast VPS Hosting](https://www.webdock.io/en)**
-- **[DevSquad](https://devsquad.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[OP.GG](https://op.gg)**
-- **[WebReinvent](https://webreinvent.com/?utm_source=laravel&utm_medium=github&utm_campaign=patreon-sponsors)**
-- **[Lendio](https://lendio.com)**
+Since we need to create Docker containers, this process may take a while. 
 
-## Contributing
+### Using the Makefile
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+- Run the command: `make build`.
+- After that, install dependencies and modules with: `make composer`.
+- Once the dependencies are installed, start the application with: `make up`.
+- Finally, create the database tables and run the migrations with: `make migrate`.
 
-## Code of Conduct
+### Using the CMD
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+- **Build the project:** Run the command `docker compose build`.
+- **Start the container to execute the app installation operations:** Run the command `docker compose proprli-app up`.
+- **Install dependencies:** Run the command `docker exec proprli-app composer install`.
+- **Run migrations to create the tables:** Run the command `docker exec proprli-app php artisan migrate`.
+- **Populate the database:** Run the command `docker exec proprli-app php artisan db:seed`.
+- **Stop the current container:** Run the command `docker compose down`.
+- **Start all containers:** Run the command `docker compose up`.
 
-## Security Vulnerabilities
+### Additional Commands
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
-
-## License
-
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+- **Bash:** Open the container's terminal with `make bash`.
+- **Down:** Stop all Docker containers with `make down`.
+- **Tests:** Run the automatic tests with `make test`.
+- **Seed:** Run the seeders independently with `make seed`.
